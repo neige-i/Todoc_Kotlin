@@ -8,7 +8,7 @@
     >
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_task_name"
+        android:id="@+id/task_name_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/task_name_hint"
@@ -16,7 +16,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_task_name"
+            android:id="@+id/task_name_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
@@ -24,19 +24,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_project_name"
+        android:id="@+id/project_name_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/task_project_hint"
-        android:labelFor="@id/input_project_name"
-        app:layout_constraintTop_toBottomOf="@id/layout_task_name"
+        android:labelFor="@id/project_name_input"
+        app:layout_constraintTop_toBottomOf="@id/task_name_input_layout"
         >
 
-        <!-- TIPS: inputType="none" to make the view non-editable -->
         <AutoCompleteTextView
-            android:id="@+id/input_project_name"
+            android:id="@+id/project_name_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"

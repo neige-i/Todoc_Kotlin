@@ -5,32 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.TaskListActivity"
+    tools:context=".ui.task_list.TaskListFragment"
     >
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/Theme.TodocKotlin"
-            app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-            tools:title="Toolbar title"
-            />
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_task"
+            android:id="@+id/task_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -39,7 +23,7 @@
             />
 
         <TextView
-            android:id="@+id/lbl_no_task"
+            android:id="@+id/no_task_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_task"
@@ -53,7 +37,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_task"
+        android:id="@+id/add_task_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

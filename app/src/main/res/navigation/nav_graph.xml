@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/taskListFragment"
+    >
+
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="fr.neige_i.todoc_kotlin.ui.task_list.TaskListFragment"
+        android:label="TaskListFragment"
+        tools:layout="@layout/fragment_task_list"
+        >
+        <action
+            android:id="@+id/action_taskListFragment_to_taskAddDialog"
+            app:destination="@id/taskAddDialog"
+            />
+    </fragment>
+    <dialog
+        android:id="@+id/taskAddDialog"
+        android:name="fr.neige_i.todoc_kotlin.ui.task_add.TaskAddDialog"
+        android:label="TaskAddDialog"
+        tools:layout="@layout/dialog_add_task"
+        />
+
+</navigation>
