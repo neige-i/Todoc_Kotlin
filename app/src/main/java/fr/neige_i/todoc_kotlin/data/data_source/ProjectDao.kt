@@ -1,0 +1,20 @@
+package fr.neige_i.todoc_kotlin.data.data_source
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import fr.neige_i.todoc_kotlin.data.model.Project
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ProjectDao {
+
+    @Query("SELECT * FROM Project")
+    fun getAllProjects(): Flow<List<Project>>
+
+    @Query("SELECT * FROM Project WHERE id = :projectId")
+    suspend fun getProjectById(projectId: Long): Project?
+
+    @Insert
+    suspend fun insert(project: Project)
+}
