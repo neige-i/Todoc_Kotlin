@@ -4,13 +4,19 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import fr.neige_i.todoc_kotlin.data.ProjectRepository
+import fr.neige_i.todoc_kotlin.data.ProjectRepositoryImpl
+import fr.neige_i.todoc_kotlin.data.TaskRepository
+import fr.neige_i.todoc_kotlin.data.TaskRepositoryImpl
 import fr.neige_i.todoc_kotlin.data.data_source.AppDatabase
 import fr.neige_i.todoc_kotlin.data.data_source.ProjectDao
+import fr.neige_i.todoc_kotlin.data.data_source.TaskDao
 import fr.neige_i.todoc_kotlin.data.model.Project
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,20 +25,40 @@ import kotlinx.coroutines.launch
 import javax.inject.Provider
 import javax.inject.Singleton
 
+// TODO: use different modules sharing the same "theme" in the same file (or better in separate files)
+
 @Module
 @InstallIn(SingletonComponent::class)
-object DataProvidingModule {
+abstract class RepositoryBindingModule {
+
+    // TODO: is @Singleton mandatory if class is not stateful
+    @Singleton
+    @Binds
+    abstract fun bindProjectRepository(
+        projectRepositoryImpl: ProjectRepositoryImpl,
+    ): ProjectRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindTaskRepository(
+        taskRepositoryImpl: TaskRepositoryImpl,
+    ): TaskRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DataSourceProvidingModule {
 
     @Singleton
     @Provides
     fun provideAppDatabase(
-        @ApplicationContext appContext: Context,
+        @ApplicationContext applicationContext: Context,
         projectDaoProvider: Provider<ProjectDao>,
     ): AppDatabase {
 
         return Room
             .databaseBuilder(
-                appContext,
+                applicationContext,
                 AppDatabase::class.java,
                 "app_database.db",
             )
@@ -62,9 +88,9 @@ object DataProvidingModule {
 
     @Singleton
     @Provides
-    fun provideProjectDao(appDatabase: AppDatabase) = appDatabase.projectDao()
+    fun provideProjectDao(appDatabase: AppDatabase): ProjectDao = appDatabase.projectDao()
 
     @Singleton
     @Provides
-    fun provideTaskDao(appDatabase: AppDatabase) = appDatabase.taskDao()
+    fun provideTaskDao(appDatabase: AppDatabase): TaskDao = appDatabase.taskDao()
 }

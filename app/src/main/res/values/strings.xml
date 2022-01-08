@@ -19,4 +19,5 @@
     <string name="task_project_hint">Project name</string>
 
     <string name="empty_task_name">The task name is required</string>
+    <string name="empty_project">A project must be selected</string>
 </resources>

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Task(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0, // TODO: is correctly initialized
     @ColumnInfo(name = "project_id") val projectId: Long,
     val name: String,
     @ColumnInfo(name = "creation_timestamp") val creationTimestamp: Long,

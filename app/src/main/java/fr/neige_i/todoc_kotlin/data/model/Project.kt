@@ -9,4 +9,6 @@ data class Project(
     @PrimaryKey val id: Long,
     val name: String,
     @ColorInt val color: Int,
-)
+) {
+    override fun toString() = name
+}
