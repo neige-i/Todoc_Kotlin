@@ -4,10 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import fr.neige_i.todoc_kotlin.domain.AddNewTaskUseCase
-import fr.neige_i.todoc_kotlin.domain.AddNewTaskUseCaseImpl
-import fr.neige_i.todoc_kotlin.domain.GetAllProjectsUseCase
-import fr.neige_i.todoc_kotlin.domain.GetAllProjectsUseCaseImpl
+import fr.neige_i.todoc_kotlin.domain.*
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -22,4 +19,14 @@ abstract class BusinessBindingModule {
     abstract fun bindAddNewTaskUseCase(
         addNewTaskUseCaseImpl: AddNewTaskUseCaseImpl,
     ): AddNewTaskUseCase
+
+    @Binds
+    abstract fun bindGetTasksWithProjectsUseCase(
+        getTasksWithProjectsUseCaseImpl: GetTasksWithProjectsUseCaseImpl,
+    ): GetTasksWithProjectsUseCase
+
+    @Binds
+    abstract fun bindDeleteTaskUseCase(
+        deleteTaskUseCaseImpl: DeleteTaskUseCaseImpl,
+    ): DeleteTaskUseCase
 }

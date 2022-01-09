@@ -9,7 +9,7 @@
     >
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_project"
+        android:id="@+id/project_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -20,7 +20,7 @@
         />
 
     <TextView
-        android:id="@+id/lbl_task_name"
+        android:id="@+id/task_name_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,15 +29,15 @@
         android:lines="1"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/lbl_project_name"
-        app:layout_constraintEnd_toStartOf="@id/img_delete"
-        app:layout_constraintStart_toEndOf="@id/img_project"
+        app:layout_constraintBottom_toTopOf="@id/project_name_text"
+        app:layout_constraintEnd_toStartOf="@id/delete_img"
+        app:layout_constraintStart_toEndOf="@id/project_img"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/tasks.json/data/taskName"
         />
 
     <TextView
-        android:id="@+id/lbl_project_name"
+        android:id="@+id/project_name_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -45,14 +45,14 @@
         android:lines="1"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/lbl_task_name"
-        app:layout_constraintStart_toStartOf="@id/lbl_task_name"
-        app:layout_constraintTop_toBottomOf="@id/lbl_task_name"
+        app:layout_constraintEnd_toEndOf="@id/task_name_text"
+        app:layout_constraintStart_toStartOf="@id/task_name_text"
+        app:layout_constraintTop_toBottomOf="@id/task_name_text"
         tools:text="@sample/tasks.json/data/projectName"
         />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_delete"
+        android:id="@+id/delete_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

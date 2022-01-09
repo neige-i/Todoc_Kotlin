@@ -78,9 +78,9 @@ object DataSourceProvidingModule {
             CoroutineScope(SupervisorJob()).launch(Dispatchers.IO) {
 
                 projectDaoProvider.get().apply {
-                    insert(Project(1L, "Projet Tartampion", 0xEADAD1))
-                    insert(Project(2L, "Projet Lucidia", 0xB4CDBA))
-                    insert(Project(3L, "Projet Circus", 0xA3CED2))
+                    insert(Project(1L, "Projet Tartampion", 0xFFEADAD1.toInt()))
+                    insert(Project(2L, "Projet Lucidia", 0xFFB4CDBA.toInt()))
+                    insert(Project(3L, "Projet Circus", 0xFFA3CED2.toInt()))
                 }
             }
         }
