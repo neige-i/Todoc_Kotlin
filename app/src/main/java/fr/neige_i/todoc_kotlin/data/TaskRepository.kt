@@ -7,12 +7,12 @@ interface TaskRepository {
 
     val allTasks: Flow<List<Task>>
 
-    fun getTasksByNameAsc(): Flow<List<Task>>
-    fun getTasksByNameDesc(): Flow<List<Task>>
-    fun getTasksByProjectNameAsc(): Flow<List<Task>>
-    fun getTasksByProjectNameDesc(): Flow<List<Task>>
-    fun getTasksByDateAsc(): Flow<List<Task>>
-    fun getTasksByDateDesc(): Flow<List<Task>>
+    val tasksByNameAsc: Flow<List<Task>>
+    val tasksByNameDesc: Flow<List<Task>>
+    val tasksByProjectNameAsc: Flow<List<Task>>
+    val tasksByProjectNameDesc: Flow<List<Task>>
+    val tasksByDateAsc: Flow<List<Task>>
+    val tasksByDateDesc: Flow<List<Task>>
 
     suspend fun addTask(task: Task)
     suspend fun deleteTask(taskId: Long)

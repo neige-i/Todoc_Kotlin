@@ -1,13 +1,12 @@
 package fr.neige_i.todoc_kotlin.ui.task_list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import fr.neige_i.todoc_kotlin.R
 import fr.neige_i.todoc_kotlin.databinding.FragmentTaskListBinding
 
 @AndroidEntryPoint
@@ -15,6 +14,7 @@ class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,12 +26,18 @@ class TaskListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val viewModel: TaskListViewModel by viewModels()
-
         val taskAdapter = TaskAdapter { projectId -> viewModel.onTaskRemoved(projectId) }
 
         setupUi(taskAdapter)
-        listenToViewState(viewModel, taskAdapter)
+        listenToViewState(taskAdapter)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return viewModel.onMenuItemClicked(item.itemId)
     }
 
     override fun onDestroyView() {
@@ -41,6 +47,8 @@ class TaskListFragment : Fragment() {
     }
 
     private fun setupUi(taskAdapter: TaskAdapter) {
+        setHasOptionsMenu(true)
+
         binding.taskList.adapter = taskAdapter
 
         binding.addTaskFab.setOnClickListener {
@@ -49,10 +57,10 @@ class TaskListFragment : Fragment() {
         }
     }
 
-    private fun listenToViewState(viewModel: TaskListViewModel, taskAdapter: TaskAdapter) {
+    private fun listenToViewState(taskAdapter: TaskAdapter) {
         viewModel.viewState.observe(viewLifecycleOwner) {
             taskAdapter.submitList(it.taskViewStates)
-            binding.noTaskText.visibility = if (it.isNoTaskTextVisible) View.VISIBLE else View.GONE
+            binding.noTaskText.visibility = it.emptyTaskTextVisibility
         }
     }
 }
