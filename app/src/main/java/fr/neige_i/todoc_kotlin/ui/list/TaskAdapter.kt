@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.ui.task_list
+package fr.neige_i.todoc_kotlin.ui.list
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater

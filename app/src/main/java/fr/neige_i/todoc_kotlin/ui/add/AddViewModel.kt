@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.ui.task_add
+package fr.neige_i.todoc_kotlin.ui.add
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -11,15 +11,15 @@ import fr.neige_i.todoc_kotlin.ui.util.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskAddViewModel @Inject constructor(
+class AddViewModel @Inject constructor(
     getAllProjectsUseCase: GetAllProjectsUseCase,
     private val addNewTaskUseCase: AddNewTaskUseCase,
     private val applicationContext: Application,
 ) : ViewModel() {
 
-    private val _viewState = MediatorLiveData<AddDialogViewState>()
+    private val _viewState = MediatorLiveData<DialogViewState>()
     // TODO: rather use backing property
-    val viewState: LiveData<AddDialogViewState> = _viewState
+    val viewState: LiveData<DialogViewState> = _viewState
 
     private val _dismissDialogEvent = SingleLiveEvent<Unit>()
     val dismissDialogEvent: LiveData<Unit> = _dismissDialogEvent
@@ -54,7 +54,7 @@ class TaskAddViewModel @Inject constructor(
             Pair(getTaskError(), getProjectError()).apply { handleButtonEvent(first, second) }
         }
 
-        _viewState.value = AddDialogViewState(projectList, taskError, projectError)
+        _viewState.value = DialogViewState(projectList, taskError, projectError)
     }
 
     private fun getTaskError(): String? = if (

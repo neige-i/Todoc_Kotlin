@@ -1,7 +1,7 @@
 package fr.neige_i.todoc_kotlin.domain
 
-import fr.neige_i.todoc_kotlin.data.ProjectRepository
-import fr.neige_i.todoc_kotlin.data.TaskRepository
+import fr.neige_i.todoc_kotlin.data.repository.ProjectRepository
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
 import fr.neige_i.todoc_kotlin.data.model.Project
 import fr.neige_i.todoc_kotlin.data.model.Task
 import kotlinx.coroutines.flow.Flow

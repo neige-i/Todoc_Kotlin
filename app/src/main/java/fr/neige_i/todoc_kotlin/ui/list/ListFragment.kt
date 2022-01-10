@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.ui.task_list
+package fr.neige_i.todoc_kotlin.ui.list
 
 import android.os.Bundle
 import android.view.*
@@ -7,21 +7,21 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.neige_i.todoc_kotlin.R
-import fr.neige_i.todoc_kotlin.databinding.FragmentTaskListBinding
+import fr.neige_i.todoc_kotlin.databinding.FragmentListBinding
 
 @AndroidEntryPoint
-class TaskListFragment : Fragment() {
+class ListFragment : Fragment() {
 
-    private var _binding: FragmentTaskListBinding? = null
+    private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: TaskListViewModel by viewModels()
+    private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -53,7 +53,7 @@ class TaskListFragment : Fragment() {
         }
 
         override fun onItemClick(taskId: Long) {
-            findNavController().navigate(TaskListFragmentDirections.actionListToDetail(taskId))
+            findNavController().navigate(ListFragmentDirections.actionListToDetail(taskId))
         }
     })
 
@@ -63,7 +63,7 @@ class TaskListFragment : Fragment() {
         binding.taskList.adapter = taskAdapter
 
         binding.addTaskFab.setOnClickListener {
-            findNavController().navigate(TaskListFragmentDirections.actionListToAdd())
+            findNavController().navigate(ListFragmentDirections.actionListToAdd())
         }
     }
 

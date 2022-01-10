@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.data
+package fr.neige_i.todoc_kotlin.data.repository
 
 import fr.neige_i.todoc_kotlin.data.model.Project
 import kotlinx.coroutines.flow.Flow

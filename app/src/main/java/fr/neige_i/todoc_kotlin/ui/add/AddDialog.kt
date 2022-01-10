@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.ui.task_add
+package fr.neige_i.todoc_kotlin.ui.add
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -13,15 +13,15 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.neige_i.todoc_kotlin.R
 import fr.neige_i.todoc_kotlin.data.model.Project
-import fr.neige_i.todoc_kotlin.databinding.DialogAddTaskBinding
+import fr.neige_i.todoc_kotlin.databinding.DialogAddBinding
 
 @AndroidEntryPoint
-class TaskAddDialog : DialogFragment() {
+class AddDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // TODO: is not setting binding to null mandatory for Garbage Collector
-        val binding = DialogAddTaskBinding.inflate(layoutInflater, null, false)
-        val viewModel: TaskAddViewModel by viewModels()
+        val binding = DialogAddBinding.inflate(layoutInflater, null, false)
+        val viewModel: AddViewModel by viewModels()
 
         // Use the NavBackStackEntry as LifecycleOwner in a DialogFragment using Jetpack Navigation
         // TODO: is question mark considered as "logic"
@@ -38,7 +38,7 @@ class TaskAddDialog : DialogFragment() {
      * [DialogInterface.OnClickListener] automatically dismisses the dialog when the button is clicked.
      * This is not the desired behaviour. Instead, use [View.OnClickListener][android.view.View.OnClickListener].
      */
-    private fun initializeDialog(binding: DialogAddTaskBinding, viewModel: TaskAddViewModel) =
+    private fun initializeDialog(binding: DialogAddBinding, viewModel: AddViewModel) =
         AlertDialog
             .Builder(context)
             .setTitle(R.string.add_task)
@@ -52,7 +52,7 @@ class TaskAddDialog : DialogFragment() {
                 }
             }
 
-    private fun setupUi(binding: DialogAddTaskBinding, viewModel: TaskAddViewModel) {
+    private fun setupUi(binding: DialogAddBinding, viewModel: AddViewModel) {
         binding.taskNameInput.doAfterTextChanged { viewModel.afterTaskNameChanged(it.toString()) }
 
         binding.projectNameAutocomplete.setOnItemClickListener { parent, _, position, _ ->
@@ -61,8 +61,8 @@ class TaskAddDialog : DialogFragment() {
     }
 
     private fun listenToViewState(
-        binding: DialogAddTaskBinding,
-        viewModel: TaskAddViewModel,
+        binding: DialogAddBinding,
+        viewModel: AddViewModel,
         lifecycleOwner: LifecycleOwner,
     ) {
         viewModel.viewState.observe(lifecycleOwner) { viewState ->
@@ -78,7 +78,7 @@ class TaskAddDialog : DialogFragment() {
         }
     }
 
-    private fun listenToViewEvents(viewModel: TaskAddViewModel, lifecycleOwner: LifecycleOwner) {
+    private fun listenToViewEvents(viewModel: AddViewModel, lifecycleOwner: LifecycleOwner) {
         viewModel.dismissDialogEvent.observe(lifecycleOwner) { dismiss() }
     }
 }

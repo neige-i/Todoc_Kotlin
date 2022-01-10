@@ -10,10 +10,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import fr.neige_i.todoc_kotlin.data.ProjectRepository
-import fr.neige_i.todoc_kotlin.data.ProjectRepositoryImpl
-import fr.neige_i.todoc_kotlin.data.TaskRepository
-import fr.neige_i.todoc_kotlin.data.TaskRepositoryImpl
+import fr.neige_i.todoc_kotlin.data.repository.ProjectRepository
+import fr.neige_i.todoc_kotlin.data.repository.ProjectRepositoryImpl
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepositoryImpl
 import fr.neige_i.todoc_kotlin.data.data_source.AppDatabase
 import fr.neige_i.todoc_kotlin.data.data_source.ProjectDao
 import fr.neige_i.todoc_kotlin.data.data_source.TaskDao

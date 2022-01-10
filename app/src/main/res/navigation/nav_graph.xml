@@ -9,9 +9,9 @@
 
     <fragment
         android:id="@+id/list_fragment"
-        android:name="fr.neige_i.todoc_kotlin.ui.task_list.TaskListFragment"
+        android:name="fr.neige_i.todoc_kotlin.ui.list.ListFragment"
         android:label="@string/list_title"
-        tools:layout="@layout/fragment_task_list"
+        tools:layout="@layout/fragment_list"
         >
         <action
             android:id="@+id/action_list_to_add"
@@ -25,9 +25,9 @@
 
     <dialog
         android:id="@+id/add_dialog"
-        android:name="fr.neige_i.todoc_kotlin.ui.task_add.TaskAddDialog"
+        android:name="fr.neige_i.todoc_kotlin.ui.add.AddDialog"
         android:label="@string/add_task"
-        tools:layout="@layout/dialog_add_task"
+        tools:layout="@layout/dialog_add"
         />
 
     <fragment

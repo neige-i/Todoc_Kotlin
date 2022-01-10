@@ -1,7 +1,7 @@
 package fr.neige_i.todoc_kotlin.domain
 
-import fr.neige_i.todoc_kotlin.data.ProjectRepositoryImpl
-import fr.neige_i.todoc_kotlin.data.TaskRepositoryImpl
+import fr.neige_i.todoc_kotlin.data.repository.ProjectRepositoryImpl
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepositoryImpl
 import fr.neige_i.todoc_kotlin.data.model.Task
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

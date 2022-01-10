@@ -1,4 +1,4 @@
-package fr.neige_i.todoc_kotlin.ui.task_list
+package fr.neige_i.todoc_kotlin.ui.list
 
 import fr.neige_i.todoc_kotlin.R
 

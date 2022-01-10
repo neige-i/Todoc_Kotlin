@@ -1,6 +1,6 @@
-package fr.neige_i.todoc_kotlin.ui.task_list
+package fr.neige_i.todoc_kotlin.ui.list
 
-data class MainViewState(
+data class ListViewState(
     val taskViewStates: List<TaskViewState>,
     val emptyTaskTextVisibility: Int, // TODO: rather use Boolean type
 )

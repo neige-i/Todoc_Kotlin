@@ -1,15 +1,15 @@
-package fr.neige_i.todoc_kotlin.ui.task_list
+package fr.neige_i.todoc_kotlin.ui.list
 
 import android.view.View
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.neige_i.todoc_kotlin.domain.DeleteTaskUseCase
-import fr.neige_i.todoc_kotlin.domain.GetTasksWithProjectsUseCase
+import fr.neige_i.todoc_kotlin.domain.GetAllTasksWithProjectsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskListViewModel @Inject constructor(
-    private val getTasksWithProjectsUseCase: GetTasksWithProjectsUseCase,
+class ListViewModel @Inject constructor(
+    private val getAllTasksWithProjectsUseCase: GetAllTasksWithProjectsUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : ViewModel() {
 
@@ -17,10 +17,10 @@ class TaskListViewModel @Inject constructor(
     private val sortingMutableLiveData = MutableLiveData(TaskSortingType.NONE)
 
     // TODO: Transformations of transformations... mmh
-    val viewState: LiveData<MainViewState> =
+    val viewState: LiveData<ListViewState> =
         Transformations.switchMap(sortingMutableLiveData) { sortingType ->
-            Transformations.map(getTasksWithProjectsUseCase(sortingType).asLiveData()) { map ->
-                MainViewState(
+            Transformations.map(getAllTasksWithProjectsUseCase(sortingType).asLiveData()) { map ->
+                ListViewState(
                     map.map { entry ->
                         val (task, project) = entry
                         TaskViewState(

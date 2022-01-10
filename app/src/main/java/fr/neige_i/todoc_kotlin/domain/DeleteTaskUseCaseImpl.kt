@@ -1,6 +1,6 @@
 package fr.neige_i.todoc_kotlin.domain
 
-import fr.neige_i.todoc_kotlin.data.TaskRepository
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
