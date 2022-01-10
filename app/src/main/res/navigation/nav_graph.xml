@@ -30,15 +30,15 @@
         tools:layout="@layout/dialog_add"
         />
 
-    <fragment
+    <dialog
         android:id="@+id/detail_fragment"
-        android:name="fr.neige_i.todoc_kotlin.ui.detail.DetailFragment"
+        android:name="fr.neige_i.todoc_kotlin.ui.detail.DetailBottomSheet"
         android:label="@string/detail_title"
-        tools:layout="@layout/fragment_detail"
+        tools:layout="@layout/dialog_detail"
         >
         <argument
             android:name="taskId"
             app:argType="long"
             />
-    </fragment>
+    </dialog>
 </navigation>

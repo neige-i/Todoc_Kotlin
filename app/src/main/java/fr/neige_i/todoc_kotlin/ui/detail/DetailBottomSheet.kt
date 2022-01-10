@@ -4,23 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import fr.neige_i.todoc_kotlin.databinding.FragmentDetailBinding
+import fr.neige_i.todoc_kotlin.databinding.DialogDetailBinding
 
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class DetailBottomSheet : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentDetailBinding? = null
-    private val binding: FragmentDetailBinding get() = _binding!!
+    private var _binding: DialogDetailBinding? = null
+    private val binding: DialogDetailBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentDetailBinding.inflate(layoutInflater, container, false)
+        _binding = DialogDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

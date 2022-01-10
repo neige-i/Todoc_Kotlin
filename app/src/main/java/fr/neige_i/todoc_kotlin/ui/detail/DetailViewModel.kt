@@ -19,7 +19,7 @@ class DetailViewModel @Inject constructor(
         .ofPattern("dd/MM/yyyy HH:mm:ss")
         .withZone(defaultZoneId)
 
-    private val args = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle)
+    private val args = DetailBottomSheetArgs.fromSavedStateHandle(savedStateHandle)
     private val taskWithProjectLiveData = getSingleTaskWithProjectUseCase(args.taskId).asLiveData()
 
     val viewState: LiveData<DetailViewState> = Transformations.map(taskWithProjectLiveData) {
