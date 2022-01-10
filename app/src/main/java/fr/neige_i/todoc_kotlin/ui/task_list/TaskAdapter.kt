@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.neige_i.todoc_kotlin.databinding.ItemTaskBinding
 
-class TaskAdapter(private val callback: (Long) -> Unit) :
+class TaskAdapter(private val callback: ItemCallback) :
     ListAdapter<TaskViewState, TaskAdapter.TaskVIewHolder>(TaskDiffUtil()) {
 
     inner class TaskVIewHolder(private val binding: ItemTaskBinding) :
@@ -22,7 +22,8 @@ class TaskAdapter(private val callback: (Long) -> Unit) :
             binding.taskNameText.text = item.taskName
             binding.projectNameText.text = item.projectName
 
-            binding.deleteImg.setOnClickListener { callback(item.taskId) }
+            binding.root.setOnClickListener { callback.onItemClick(item.taskId) }
+            binding.deleteImg.setOnClickListener { callback.onDelete(item.taskId) }
         }
     }
 
@@ -40,5 +41,10 @@ class TaskAdapter(private val callback: (Long) -> Unit) :
 
     override fun onBindViewHolder(holder: TaskVIewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    interface ItemCallback {
+        fun onDelete(taskId: Long)
+        fun onItemClick(taskId: Long)
     }
 }

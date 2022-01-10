@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import java.time.Clock
+import java.time.ZoneId
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,4 +23,7 @@ object FrameworkProvidingModule {
 
     @Provides
     fun provideDefaultClock(): Clock = Clock.systemDefaultZone()
+
+    @Provides
+    fun provideDefaultZoneId(): ZoneId = ZoneId.systemDefault()
 }

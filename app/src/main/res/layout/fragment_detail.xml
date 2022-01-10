@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".ui.detail.DetailFragment"
+    >
+
+    <TextView
+        android:id="@+id/task_id_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/task_id"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/task_name_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/task_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/task_name"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/project_name_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/task_id_label"
+        />
+
+    <TextView
+        android:id="@+id/project_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/project_name"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/creation_date_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/task_name_label"
+        />
+
+    <TextView
+        android:id="@+id/creation_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/creation_date"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/project_name_label"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:barrierDirection="end"
+        app:barrierMargin="20dp"
+        app:constraint_referenced_ids="task_id_label,task_name_label,project_name_label, creation_date_label"
+        />
+
+    <TextView
+        android:id="@+id/task_id_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/task_id_label"
+        tools:text="123456789"
+        />
+
+    <TextView
+        android:id="@+id/task_name_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/task_name_label"
+        tools:text="Name of the task"
+        />
+
+    <TextView
+        android:id="@+id/project_name_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/project_name_label"
+        tools:text="Name of the associated project"
+        />
+
+    <TextView
+        android:id="@+id/creation_date_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/creation_date_label"
+        tools:text="09/01/2022 23:58"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

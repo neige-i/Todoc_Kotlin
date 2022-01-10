@@ -20,4 +20,9 @@
 
     <string name="empty_task_name">The task name is required</string>
     <string name="empty_project">A project must be selected</string>
+
+    <string name="task_id">Task ID</string>
+    <string name="task_name">Task name</string>
+    <string name="project_name">Project name</string>
+    <string name="creation_date">Creation date</string>
 </resources>

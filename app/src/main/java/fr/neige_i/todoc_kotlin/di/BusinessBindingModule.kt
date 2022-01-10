@@ -29,4 +29,9 @@ abstract class BusinessBindingModule {
     abstract fun bindDeleteTaskUseCase(
         deleteTaskUseCaseImpl: DeleteTaskUseCaseImpl,
     ): DeleteTaskUseCase
+
+    @Binds
+    abstract fun bindGetSingleTaskWithProjectUseCase(
+        getSingleTaskWithProjectUseCaseImpl: GetSingleTaskWithProjectUseCaseImpl,
+    ): GetSingleTaskWithProjectUseCase
 }

@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
 
+    @Query("SELECT * FROM Task WHERE id = :taskId")
+    fun getTaskById(taskId: Long): Flow<Task>
+
     @Query("SELECT * FROM Task")
     fun getAllTasks(): Flow<List<Task>>
 

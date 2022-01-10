@@ -4,25 +4,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/taskListFragment"
+    app:startDestination="@id/list_fragment"
     >
 
     <fragment
-        android:id="@+id/taskListFragment"
+        android:id="@+id/list_fragment"
         android:name="fr.neige_i.todoc_kotlin.ui.task_list.TaskListFragment"
         android:label="TaskListFragment"
         tools:layout="@layout/fragment_task_list"
         >
         <action
-            android:id="@+id/action_taskListFragment_to_taskAddDialog"
-            app:destination="@id/taskAddDialog"
+            android:id="@+id/action_list_to_add"
+            app:destination="@id/add_dialog"
+            />
+        <action
+            android:id="@+id/action_list_to_detail"
+            app:destination="@id/detail_fragment"
             />
     </fragment>
+
     <dialog
-        android:id="@+id/taskAddDialog"
+        android:id="@+id/add_dialog"
         android:name="fr.neige_i.todoc_kotlin.ui.task_add.TaskAddDialog"
         android:label="TaskAddDialog"
         tools:layout="@layout/dialog_add_task"
         />
 
+    <fragment
+        android:id="@+id/detail_fragment"
+        android:name="fr.neige_i.todoc_kotlin.ui.detail.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail"
+        >
+        <argument
+            android:name="taskId"
+            app:argType="long"
+            />
+    </fragment>
 </navigation>

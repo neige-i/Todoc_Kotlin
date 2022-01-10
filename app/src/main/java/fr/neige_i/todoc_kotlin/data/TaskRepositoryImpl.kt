@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : TaskRepository {
 
+    override fun getTask(taskId: Long): Flow<Task> = taskDao.getTaskById(taskId)
     override val allTasks: Flow<List<Task>> = taskDao.getAllTasks()
 
     override val tasksByNameAsc: Flow<List<Task>> = taskDao.getTasksByNameAsc()

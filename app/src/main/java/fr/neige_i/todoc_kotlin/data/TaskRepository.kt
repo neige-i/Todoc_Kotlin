@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
 
+    fun getTask(taskId: Long): Flow<Task>
     val allTasks: Flow<List<Task>>
 
     val tasksByNameAsc: Flow<List<Task>>

@@ -26,10 +26,10 @@ class TaskListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val taskAdapter = TaskAdapter { projectId -> viewModel.onTaskRemoved(projectId) }
+        val adapter = taskAdapter
 
-        setupUi(taskAdapter)
-        listenToViewState(taskAdapter)
+        setupUi(adapter)
+        listenToViewState(adapter)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -46,14 +46,24 @@ class TaskListFragment : Fragment() {
         _binding = null
     }
 
+    // TODO: better keep function instead of val
+    private val taskAdapter = TaskAdapter(object : TaskAdapter.ItemCallback {
+        override fun onDelete(taskId: Long) {
+            viewModel.onTaskRemoved(taskId)
+        }
+
+        override fun onItemClick(taskId: Long) {
+            findNavController().navigate(TaskListFragmentDirections.actionListToDetail(taskId))
+        }
+    })
+
     private fun setupUi(taskAdapter: TaskAdapter) {
         setHasOptionsMenu(true)
 
         binding.taskList.adapter = taskAdapter
 
         binding.addTaskFab.setOnClickListener {
-            findNavController()
-                .navigate(TaskListFragmentDirections.actionTaskListFragmentToTaskAddDialog())
+            findNavController().navigate(TaskListFragmentDirections.actionListToAdd())
         }
     }
 

@@ -25,7 +25,7 @@ class TaskAddDialog : DialogFragment() {
 
         // Use the NavBackStackEntry as LifecycleOwner in a DialogFragment using Jetpack Navigation
         // TODO: is question mark considered as "logic"
-        val backStackEntry = findNavController().getBackStackEntry(R.id.taskAddDialog)
+        val backStackEntry = findNavController().getBackStackEntry(R.id.add_dialog)
 
         setupUi(binding, viewModel)
         listenToViewState(binding, viewModel, backStackEntry)
