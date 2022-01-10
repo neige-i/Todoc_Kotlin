@@ -16,7 +16,7 @@ class DetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val dateTimeFormatter = DateTimeFormatter
-        .ofPattern("dd/MM/yyyy HH:mm")
+        .ofPattern("dd/MM/yyyy HH:mm:ss")
         .withZone(defaultZoneId)
 
     private val args = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle)

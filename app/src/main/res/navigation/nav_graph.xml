@@ -10,7 +10,7 @@
     <fragment
         android:id="@+id/list_fragment"
         android:name="fr.neige_i.todoc_kotlin.ui.task_list.TaskListFragment"
-        android:label="TaskListFragment"
+        android:label="@string/list_title"
         tools:layout="@layout/fragment_task_list"
         >
         <action
@@ -26,14 +26,14 @@
     <dialog
         android:id="@+id/add_dialog"
         android:name="fr.neige_i.todoc_kotlin.ui.task_add.TaskAddDialog"
-        android:label="TaskAddDialog"
+        android:label="@string/add_task"
         tools:layout="@layout/dialog_add_task"
         />
 
     <fragment
         android:id="@+id/detail_fragment"
         android:name="fr.neige_i.todoc_kotlin.ui.detail.DetailFragment"
-        android:label="Detail"
+        android:label="@string/detail_title"
         tools:layout="@layout/fragment_detail"
         >
         <argument

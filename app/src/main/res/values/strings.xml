@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Todoc Kotlin</string>
 
+    <string name="list_title">Task list</string>
+    <string name="detail_title">Task details</string>
+
     <string name="label_action_sort">Sort</string>
 
     <string name="sort_alphabetical_task">A -&gt; Z (task)</string>
