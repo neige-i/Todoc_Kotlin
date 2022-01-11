@@ -5,36 +5,46 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.neige_i.todoc_kotlin.R
 import fr.neige_i.todoc_kotlin.data.model.Project
+import fr.neige_i.todoc_kotlin.di.IoCoroutineDispatcher
+import fr.neige_i.todoc_kotlin.di.MainCoroutineDispatcher
 import fr.neige_i.todoc_kotlin.domain.AddNewTaskUseCase
 import fr.neige_i.todoc_kotlin.domain.GetAllProjectsUseCase
 import fr.neige_i.todoc_kotlin.ui.util.SingleLiveEvent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
     getAllProjectsUseCase: GetAllProjectsUseCase,
     private val addNewTaskUseCase: AddNewTaskUseCase,
+    @IoCoroutineDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainCoroutineDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val applicationContext: Application,
 ) : ViewModel() {
 
-    private val _viewState = MediatorLiveData<DialogViewState>()
-    // TODO: rather use backing property
-    val viewState: LiveData<DialogViewState> = _viewState
+    private val viewStateMediatorLiveData = MediatorLiveData<DialogViewState>()
+    val viewStateLiveData: LiveData<DialogViewState> = viewStateMediatorLiveData
 
-    private val _dismissDialogEvent = SingleLiveEvent<Unit>()
-    val dismissDialogEvent: LiveData<Unit> = _dismissDialogEvent
+    private val dismissDialogSingleLiveEvent = SingleLiveEvent<Unit>()
+    val dismissDialogLiveData: LiveData<Unit> = dismissDialogSingleLiveEvent
 
-    private val databaseProjectsMutableLiveData = getAllProjectsUseCase().asLiveData() // TODO: can be local
     private val addButtonPingMutableLiveData = MutableLiveData<Boolean>()
-    // TODO: use late init instead of var? because of impossible smart cast
-    private lateinit var typedTaskName: String
-    private lateinit var selectedProject: Project
+    private var addTaskForm = AddTaskForm(
+        taskName = "",
+        taskError = null,
+        selectedProject = null,
+        projectError = null
+    )
 
     init {
-        _viewState.addSource(databaseProjectsMutableLiveData) { projectList ->
+        val databaseProjectsMutableLiveData = getAllProjectsUseCase().asLiveData()
+
+        viewStateMediatorLiveData.addSource(databaseProjectsMutableLiveData) { projectList ->
             viewStateCombine(projectList, addButtonPingMutableLiveData.value)
         }
-        _viewState.addSource(addButtonPingMutableLiveData) { addButtonPing ->
+        viewStateMediatorLiveData.addSource(addButtonPingMutableLiveData) { addButtonPing ->
             viewStateCombine(databaseProjectsMutableLiveData.value, addButtonPing)
         }
     }
@@ -44,51 +54,70 @@ class AddViewModel @Inject constructor(
             return
         }
 
-        // TODO: is following code "readable"
-        val (taskError, projectError) = if (addButtonPing == null) {
-            // Initial value
-            Pair(null, null)
-        } else {
-            this.addButtonPingMutableLiveData.value = false
+        if (addButtonPing == true) {
+            addButtonPingMutableLiveData.value = false
 
-            Pair(getTaskError(), getProjectError()).apply { handleButtonEvent(first, second) }
+            updateFormErrors()
+            handleButtonEvent()
         }
 
-        _viewState.value = DialogViewState(projectList, taskError, projectError)
+        viewStateMediatorLiveData.value = DialogViewState(
+            projectList,
+            addTaskForm.taskError,
+            addTaskForm.projectError
+        )
     }
 
-    private fun getTaskError(): String? = if (
-        this::typedTaskName.isInitialized &&
-        typedTaskName.isNotBlank() &&
-        typedTaskName != "null"
-    ) {
-        null
-    } else {
-        applicationContext.getString(R.string.empty_task_name)
+    private fun updateFormErrors() {
+        addTaskForm = addTaskForm.copy(
+            taskError = if (addTaskForm.taskName.isNotBlank() && addTaskForm.taskName != "null") {
+                null
+            } else {
+                applicationContext.getString(R.string.empty_task_name)
+            },
+            projectError = if (addTaskForm.selectedProject != null) {
+                null
+            } else {
+                applicationContext.getString(R.string.empty_project)
+            }
+        )
     }
 
-    private fun getProjectError(): String? = if (this::selectedProject.isInitialized) {
-        null
-    } else {
-        applicationContext.getString(R.string.empty_project)
-    }
+    private fun handleButtonEvent() {
+        val capturedProject = addTaskForm.selectedProject
 
-    private fun handleButtonEvent(taskError: String?, projectError: String?) {
-        if (taskError == null && projectError == null) {
-            _dismissDialogEvent.call()
-            addNewTaskUseCase(selectedProject.id, typedTaskName)
+        if (addTaskForm.taskError == null &&
+            addTaskForm.projectError == null &&
+            capturedProject != null
+        ) {
+            viewModelScope.launch(ioDispatcher) {
+                addNewTaskUseCase(capturedProject.id, addTaskForm.taskName)
+
+                /* Jump to Main thread to set LiveDate with setValue() (here through call() method)
+                to avoid calling postValue() from a background thread */
+                withContext(mainDispatcher) {
+                    dismissDialogSingleLiveEvent.call()
+                }
+            }
         }
     }
 
     fun afterTaskNameChanged(taskName: String) {
-        typedTaskName = taskName
+        addTaskForm = addTaskForm.copy(taskName = taskName)
     }
 
     fun onProjectSelected(selectedProject: Project) {
-        this.selectedProject = selectedProject
+        addTaskForm = addTaskForm.copy(selectedProject = selectedProject)
     }
 
     fun onPositiveButtonClicked() {
         addButtonPingMutableLiveData.value = true
     }
+
+    private data class AddTaskForm(
+        val taskName: String,
+        val taskError: String?,
+        val selectedProject: Project?,
+        val projectError: String?,
+    )
 }

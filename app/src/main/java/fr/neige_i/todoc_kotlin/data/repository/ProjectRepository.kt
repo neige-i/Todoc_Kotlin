@@ -5,7 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProjectRepository {
 
-    val allProjects: Flow<List<Project>>
-
-    suspend fun getProject(projectId: Long): Project?
+    fun getAllProjects(): Flow<List<Project>>
 }

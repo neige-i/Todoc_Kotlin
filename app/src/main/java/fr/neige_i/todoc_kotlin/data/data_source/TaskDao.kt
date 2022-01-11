@@ -21,7 +21,6 @@ interface TaskDao {
     @Query("SELECT * FROM Task ORDER BY name COLLATE NOCASE DESC")
     fun getTasksByNameDesc(): Flow<List<Task>>
 
-    // TODO: cannot use "SELECT * FROM Task"
     @Query("""
         SELECT Task.id, Task.project_id, Task.name, Task.creation_timestamp FROM Task
         INNER JOIN Project ON Project.id = Task.project_id

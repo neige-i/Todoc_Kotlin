@@ -25,13 +25,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Provider
 import javax.inject.Singleton
 
-// TODO: use different modules sharing the same "theme" in the same file (or better in separate files)
-
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryBindingModule {
 
-    // TODO: is @Singleton mandatory if class is not stateful
     @Singleton
     @Binds
     abstract fun bindProjectRepository(

@@ -1,22 +1,18 @@
 package fr.neige_i.todoc_kotlin.domain
 
 import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
+import fr.neige_i.todoc_kotlin.di.IoCoroutineDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DeleteTaskUseCaseImpl @Inject constructor(
     private val taskRepository: TaskRepository,
-    private val applicationScope: CoroutineScope,
-    private val ioDispatcher: CoroutineDispatcher,
+    @IoCoroutineDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DeleteTaskUseCase {
 
-    override fun invoke(projectId: Long) {
-        // TODO: which scope is preferred for deleting a task
-        applicationScope.launch(ioDispatcher) {
-
-            taskRepository.deleteTask(projectId)
-        }
+    // withContext() is added for testing purpose
+    override suspend fun invoke(projectId: Long) = withContext(ioDispatcher) {
+        taskRepository.deleteTask(projectId)
     }
 }

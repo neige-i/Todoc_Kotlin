@@ -1,9 +1,9 @@
 package fr.neige_i.todoc_kotlin.domain
 
-import fr.neige_i.todoc_kotlin.data.repository.ProjectRepository
-import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
 import fr.neige_i.todoc_kotlin.data.model.Project
 import fr.neige_i.todoc_kotlin.data.model.Task
+import fr.neige_i.todoc_kotlin.data.repository.ProjectRepository
+import fr.neige_i.todoc_kotlin.data.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
@@ -14,7 +14,10 @@ class GetSingleTaskWithProjectUseCaseImpl @Inject constructor(
 ) : GetSingleTaskWithProjectUseCase {
 
     override fun invoke(taskId: Long): Flow<Pair<Task, Project>> =
-        combine(taskRepository.getTask(taskId), projectRepository.allProjects) { task, projects ->
+        combine(
+            taskRepository.getTask(taskId),
+            projectRepository.getAllProjects()
+        ) { task, projects ->
 
             Pair(task, projects.first { project -> project.id == task.projectId })
         }

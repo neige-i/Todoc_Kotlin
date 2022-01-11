@@ -19,12 +19,10 @@ import fr.neige_i.todoc_kotlin.databinding.DialogAddBinding
 class AddDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // TODO: is not setting binding to null mandatory for Garbage Collector
         val binding = DialogAddBinding.inflate(layoutInflater, null, false)
         val viewModel: AddViewModel by viewModels()
 
         // Use the NavBackStackEntry as LifecycleOwner in a DialogFragment using Jetpack Navigation
-        // TODO: is question mark considered as "logic"
         val backStackEntry = findNavController().getBackStackEntry(R.id.add_dialog)
 
         setupUi(binding, viewModel)
@@ -44,9 +42,9 @@ class AddDialog : DialogFragment() {
             .setTitle(R.string.add_task)
             .setView(binding.root)
             .setPositiveButton(R.string.add, null)
-            .create().also { alertDialog ->
-                alertDialog.setOnShowListener {
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            .create().apply {
+                setOnShowListener {
+                    getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                         viewModel.onPositiveButtonClicked()
                     }
                 }
@@ -65,7 +63,7 @@ class AddDialog : DialogFragment() {
         viewModel: AddViewModel,
         lifecycleOwner: LifecycleOwner,
     ) {
-        viewModel.viewState.observe(lifecycleOwner) { viewState ->
+        viewModel.viewStateLiveData.observe(lifecycleOwner) { viewState ->
 
             binding.projectNameAutocomplete.setAdapter(ArrayAdapter(
                 requireContext(),
@@ -79,6 +77,6 @@ class AddDialog : DialogFragment() {
     }
 
     private fun listenToViewEvents(viewModel: AddViewModel, lifecycleOwner: LifecycleOwner) {
-        viewModel.dismissDialogEvent.observe(lifecycleOwner) { dismiss() }
+        viewModel.dismissDialogLiveData.observe(lifecycleOwner) { dismiss() }
     }
 }

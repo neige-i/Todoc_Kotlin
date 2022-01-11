@@ -9,8 +9,5 @@ class ProjectRepositoryImpl @Inject constructor(
     private val projectDao: ProjectDao,
 ) : ProjectRepository {
 
-    override val allProjects: Flow<List<Project>> = projectDao.getAllProjects()
-
-    override suspend fun getProject(projectId: Long): Project? =
-        projectDao.getProjectById(projectId)
+    override fun getAllProjects(): Flow<List<Project>> = projectDao.getAllProjects()
 }

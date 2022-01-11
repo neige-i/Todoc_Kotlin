@@ -12,15 +12,15 @@ import fr.neige_i.todoc_kotlin.databinding.DialogDetailBinding
 @AndroidEntryPoint
 class DetailBottomSheet : BottomSheetDialogFragment() {
 
-    private var _binding: DialogDetailBinding? = null
-    private val binding: DialogDetailBinding get() = _binding!!
+    private var mutableBinding: DialogDetailBinding? = null
+    private val binding: DialogDetailBinding get() = mutableBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DialogDetailBinding.inflate(layoutInflater, container, false)
+        mutableBinding = DialogDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -39,6 +39,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        _binding = null
+        mutableBinding = null
     }
 }

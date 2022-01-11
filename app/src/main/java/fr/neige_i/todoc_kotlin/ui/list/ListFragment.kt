@@ -2,6 +2,7 @@ package fr.neige_i.todoc_kotlin.ui.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,8 +13,8 @@ import fr.neige_i.todoc_kotlin.databinding.FragmentListBinding
 @AndroidEntryPoint
 class ListFragment : Fragment() {
 
-    private var _binding: FragmentListBinding? = null
-    private val binding get() = _binding!!
+    private var mutableBinding: FragmentListBinding? = null
+    private val binding get() = mutableBinding!!
     private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
@@ -21,12 +22,20 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentListBinding.inflate(inflater, container, false)
+        mutableBinding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = taskAdapter
+        val adapter = TaskAdapter(object : TaskAdapter.ItemCallback {
+            override fun onDelete(taskId: Long) {
+                viewModel.onTaskRemoved(taskId)
+            }
+
+            override fun onItemClick(taskId: Long) {
+                findNavController().navigate(ListFragmentDirections.actionListToDetail(taskId))
+            }
+        })
 
         setupUi(adapter)
         listenToViewState(adapter)
@@ -43,19 +52,8 @@ class ListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        _binding = null
+        mutableBinding = null
     }
-
-    // TODO: better keep function instead of val
-    private val taskAdapter = TaskAdapter(object : TaskAdapter.ItemCallback {
-        override fun onDelete(taskId: Long) {
-            viewModel.onTaskRemoved(taskId)
-        }
-
-        override fun onItemClick(taskId: Long) {
-            findNavController().navigate(ListFragmentDirections.actionListToDetail(taskId))
-        }
-    })
 
     private fun setupUi(taskAdapter: TaskAdapter) {
         setHasOptionsMenu(true)
@@ -70,7 +68,7 @@ class ListFragment : Fragment() {
     private fun listenToViewState(taskAdapter: TaskAdapter) {
         viewModel.viewState.observe(viewLifecycleOwner) {
             taskAdapter.submitList(it.taskViewStates)
-            binding.noTaskText.visibility = it.emptyTaskTextVisibility
+            binding.noTaskText.isVisible = it.emptyTaskTextVisibility
         }
     }
 }

@@ -9,5 +9,5 @@ class GetAllProjectsUseCaseImpl @Inject constructor(
     private val projectRepository: ProjectRepositoryImpl,
 ) : GetAllProjectsUseCase {
 
-    override fun invoke(): Flow<List<Project>> = projectRepository.allProjects
+    override fun invoke(): Flow<List<Project>> = projectRepository.getAllProjects()
 }

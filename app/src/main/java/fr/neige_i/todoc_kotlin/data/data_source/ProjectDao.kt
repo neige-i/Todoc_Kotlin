@@ -12,9 +12,6 @@ interface ProjectDao {
     @Query("SELECT * FROM Project")
     fun getAllProjects(): Flow<List<Project>>
 
-    @Query("SELECT * FROM Project WHERE id = :projectId")
-    suspend fun getProjectById(projectId: Long): Project?
-
     @Insert
     suspend fun insert(project: Project)
 }
