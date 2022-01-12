@@ -1,8 +1,12 @@
 package fr.neige_i.todoc_kotlin.ui.detail
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.neige_i.todoc_kotlin.domain.GetSingleTaskWithProjectUseCase
+import fr.neige_i.todoc_kotlin.ui.util.NavArgsProducer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -10,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    navArgsProducer: NavArgsProducer,
     getSingleTaskWithProjectUseCase: GetSingleTaskWithProjectUseCase,
     defaultZoneId: ZoneId,
 ) : ViewModel() {
@@ -19,7 +23,7 @@ class DetailViewModel @Inject constructor(
         .ofPattern("dd/MM/yyyy HH:mm:ss")
         .withZone(defaultZoneId)
 
-    private val args = DetailBottomSheetArgs.fromSavedStateHandle(savedStateHandle)
+    private val args = navArgsProducer.getNavArgs(DetailBottomSheetArgs::class)
     private val taskWithProjectLiveData = getSingleTaskWithProjectUseCase(args.taskId).asLiveData()
 
     val viewState: LiveData<DetailViewState> = Transformations.map(taskWithProjectLiveData) {

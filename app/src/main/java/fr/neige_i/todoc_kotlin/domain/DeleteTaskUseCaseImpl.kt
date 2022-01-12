@@ -12,7 +12,7 @@ class DeleteTaskUseCaseImpl @Inject constructor(
 ) : DeleteTaskUseCase {
 
     // withContext() is added for testing purpose
-    override suspend fun invoke(projectId: Long) = withContext(ioDispatcher) {
-        taskRepository.deleteTask(projectId)
+    override suspend fun invoke(taskId: Long) = withContext(ioDispatcher) {
+        taskRepository.deleteTask(taskId)
     }
 }
