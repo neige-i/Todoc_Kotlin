@@ -8,11 +8,11 @@ object TestLifecycleRule {
         return liveData.value
     }
 
-    fun <T> getLiveDataTriggerCount(liveData: LiveData<T>): Int {
-        var called = 0
+    fun <T> isLiveDataTriggered(liveData: LiveData<T>): Boolean {
+        var isCalled = false
         liveData.observeForever {
-            called++
+            isCalled = true
         }
-        return called
+        return isCalled
     }
 }

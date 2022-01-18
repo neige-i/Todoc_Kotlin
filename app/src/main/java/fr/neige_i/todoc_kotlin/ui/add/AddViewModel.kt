@@ -102,8 +102,10 @@ class AddViewModel @Inject constructor(
         }
     }
 
-    fun afterTaskNameChanged(taskName: String) {
-        addTaskForm = addTaskForm.copy(taskName = taskName)
+    fun afterTaskNameChanged(taskName: String?) {
+        if (taskName != null) {
+            addTaskForm = addTaskForm.copy(taskName = taskName)
+        }
     }
 
     fun onProjectSelected(selectedProject: Project) {

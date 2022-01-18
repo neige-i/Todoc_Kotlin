@@ -31,8 +31,8 @@ class DeleteTaskUseCaseImplTest {
         coEvery { taskRepositoryMock.deleteTask(any()) } returns Unit
 
         deleteTaskUseCase = DeleteTaskUseCaseImpl(
-            taskRepositoryMock,
-            testCoroutineRule.testCoroutineDispatcher
+            taskRepository = taskRepositoryMock,
+            ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
     }
 

@@ -6,15 +6,15 @@ import fr.neige_i.todoc_kotlin.R
 import fr.neige_i.todoc_kotlin.data.model.Project
 import fr.neige_i.todoc_kotlin.domain.AddNewTaskUseCase
 import fr.neige_i.todoc_kotlin.domain.GetAllProjectsUseCase
-import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.getLiveDataTriggerCount
-import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.getValueForTesting
 import fr.neige_i.todoc_kotlin.util.TestCoroutineRule
+import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.getValueForTesting
+import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.isLiveDataTriggered
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,158 +59,125 @@ class AddViewModelTest {
         every { getAllProjectsUseCaseMock() } returns flowOf(getDefaultProjectList())
         every { contextMockK.getString(R.string.empty_task_name) } returns TASK_ERROR
         every { contextMockK.getString(R.string.empty_project) } returns PROJECT_ERROR
-        coEvery { addNewTaskUseCaseMock(project3.id, TASK_NAME_TO_ADD) } returns Unit
+        coJustRun { addNewTaskUseCaseMock(project3.id, TASK_NAME_TO_ADD) }
 
         addViewModel = AddViewModel(
-            getAllProjectsUseCaseMock,
-            addNewTaskUseCaseMock,
-            testCoroutineRule.testCoroutineDispatcher,
-            testCoroutineRule.testCoroutineDispatcher,
-            contextMockK
+            getAllProjectsUseCase = getAllProjectsUseCaseMock,
+            addNewTaskUseCase = addNewTaskUseCaseMock,
+            ioDispatcher = testCoroutineRule.testCoroutineDispatcher,
+            mainDispatcher = testCoroutineRule.testCoroutineDispatcher,
+            applicationContext = contextMockK
         )
+
+        verify(exactly = 1) { getAllProjectsUseCaseMock.invoke() }
     }
 
     @Test
-    fun `returns initial view state when ViewModel is created`() {
+    fun `nominal case`() {
         // WHEN
+        // ViewModel is initialized
+
         val viewState = getValueForTesting(addViewModel.viewStateLiveData)
 
         // THEN
         assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                null,
-                null
-            ),
+            getDefaultDialogViewState(),
             viewState
         )
+
+        confirmVerified(getAllProjectsUseCaseMock, addNewTaskUseCaseMock)
     }
 
     @Test
-    fun `display BOTH task and project errors when the button is clicked with empty fields`() {
+    fun `display BOTH errors when BOTH fields are empty`() {
         // WHEN
         addViewModel.onPositiveButtonClicked()
+
         val viewState = getValueForTesting(addViewModel.viewStateLiveData)
-        val dismissEvent = getLiveDataTriggerCount(addViewModel.dismissDialogLiveData)
+        val isDialogDismissed = isLiveDataTriggered(addViewModel.dismissDialogLiveData)
 
         // THEN
         assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                TASK_ERROR,
-                PROJECT_ERROR
-            ),
+            getDefaultDialogViewState().copy(taskError = TASK_ERROR, projectError = PROJECT_ERROR),
             viewState
         )
-        assertEquals(0, dismissEvent) // Dialog is not dismissed
+        assertFalse(isDialogDismissed)
 
-        coVerify(exactly = 0) { addNewTaskUseCaseMock(any(), any()) } // Task is not added
-        confirmVerified(addNewTaskUseCaseMock)
+        confirmVerified(getAllProjectsUseCaseMock, addNewTaskUseCaseMock)
     }
 
     @Test
-    fun `display TASK ERROR only when the button is clicked with empty task but project is selected`() {
+    fun `display TASK error when project is selected`() {
         // GIVEN
         addViewModel.onProjectSelected(project2)
 
         // WHEN
         addViewModel.onPositiveButtonClicked()
+
         val viewState = getValueForTesting(addViewModel.viewStateLiveData)
-        val dismissEvent = getLiveDataTriggerCount(addViewModel.dismissDialogLiveData)
+        val isDialogDismissed = isLiveDataTriggered(addViewModel.dismissDialogLiveData)
 
         // THEN
         assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                TASK_ERROR,
-                null // No error, because the project #2 has been selected
-            ),
+            getDefaultDialogViewState().copy(taskError = TASK_ERROR),
             viewState
         )
-        assertEquals(0, dismissEvent) // Dialog is not dismissed
+        assertFalse(isDialogDismissed)
 
-        coVerify(exactly = 0) { addNewTaskUseCaseMock(any(), any()) } // Task is not added
-        confirmVerified(addNewTaskUseCaseMock)
+        confirmVerified(getAllProjectsUseCaseMock, addNewTaskUseCaseMock)
     }
 
     @Test
-    fun `display TASK ERROR only when the button is clicked with null task but project is selected`() {
-        // GIVEN
-        addViewModel.afterTaskNameChanged("null")
-        addViewModel.onProjectSelected(project2)
-
-        // WHEN
-        addViewModel.onPositiveButtonClicked()
-        val viewState = getValueForTesting(addViewModel.viewStateLiveData)
-        val dismissEvent = getLiveDataTriggerCount(addViewModel.dismissDialogLiveData)
-
-        // THEN
-        assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                TASK_ERROR,
-                null // No error, because the project #2 has been selected
-            ),
-            viewState
-        )
-        assertEquals(0, dismissEvent) // Dialog is not dismissed
-
-        coVerify(exactly = 0) { addNewTaskUseCaseMock(any(), any()) } // Task is not added
-        confirmVerified(addNewTaskUseCaseMock)
-    }
-
-    @Test
-    fun `display PROJECT ERROR only when the button is clicked with empty project but task is typed`() {
+    fun `display PROJECT error when task is typed`() {
         // GIVEN
         addViewModel.afterTaskNameChanged(TASK_NAME_TO_ADD)
 
         // WHEN
         addViewModel.onPositiveButtonClicked()
+
         val viewState = getValueForTesting(addViewModel.viewStateLiveData)
-        val dismissEvent = getLiveDataTriggerCount(addViewModel.dismissDialogLiveData)
+        val isDialogDismissed = isLiveDataTriggered(addViewModel.dismissDialogLiveData)
 
         // THEN
         assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                null, // No error, because the project #2 has been selected
-                PROJECT_ERROR
-            ),
+            getDefaultDialogViewState().copy(projectError = PROJECT_ERROR),
             viewState
         )
-        assertEquals(0, dismissEvent) // Dialog is not dismissed
+        assertFalse(isDialogDismissed)
 
-        coVerify(exactly = 0) { addNewTaskUseCaseMock(any(), any()) } // Task is not added
-        confirmVerified(addNewTaskUseCaseMock)
+        confirmVerified(getAllProjectsUseCaseMock, addNewTaskUseCaseMock)
     }
 
     @Test
-    fun `display NO ERRORS, DISMISS the dialog and ADD the task when the button is clicked with correct fields`() = runTest {
+    fun `happy path`() = runTest {
         // GIVEN
         addViewModel.afterTaskNameChanged(TASK_NAME_TO_ADD)
         addViewModel.onProjectSelected(project3)
 
         // WHEN
         addViewModel.onPositiveButtonClicked()
+
         val viewState = getValueForTesting(addViewModel.viewStateLiveData)
-        val dismissEvent = getLiveDataTriggerCount(addViewModel.dismissDialogLiveData)
+        val isDialogDismissed = isLiveDataTriggered(addViewModel.dismissDialogLiveData)
 
         // THEN
         assertEquals(
-            DialogViewState(
-                getDefaultProjectList(),
-                null,
-                null
-            ),
+            getDefaultDialogViewState(),
             viewState
         )
-        assertEquals(1, dismissEvent) // Dialog IS dismissed
+        assertTrue(isDialogDismissed)
 
-        coVerify(exactly = 1) { addNewTaskUseCaseMock(project3.id, TASK_NAME_TO_ADD) } // Task IS added
-        confirmVerified(addNewTaskUseCaseMock)
+        coVerify(exactly = 1) { addNewTaskUseCaseMock(project3.id, TASK_NAME_TO_ADD) }
+        confirmVerified(getAllProjectsUseCaseMock, addNewTaskUseCaseMock)
     }
 
     // region out
+
+    private fun getDefaultDialogViewState() = DialogViewState(
+        projectList = getDefaultProjectList(),
+        taskError = null,
+        projectError = null
+    )
 
     private fun getDefaultProjectList() = listOf(project1, project2, project3)
 

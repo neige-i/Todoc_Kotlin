@@ -51,7 +51,7 @@ class AddDialog : DialogFragment() {
             }
 
     private fun setupUi(binding: DialogAddBinding, viewModel: AddViewModel) {
-        binding.taskNameInput.doAfterTextChanged { viewModel.afterTaskNameChanged(it.toString()) }
+        binding.taskNameInput.doAfterTextChanged { viewModel.afterTaskNameChanged(it?.toString()) }
 
         binding.projectNameAutocomplete.setOnItemClickListener { parent, _, position, _ ->
             viewModel.onProjectSelected(parent.getItemAtPosition(position) as Project)

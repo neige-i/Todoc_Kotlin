@@ -53,8 +53,8 @@ class GetSingleTaskWithProjectUseCaseImplTest {
         ))
 
         getSingleTaskWithProjectUseCase = GetSingleTaskWithProjectUseCaseImpl(
-            taskRepositoryMock,
-            projectRepositoryMock,
+            taskRepository = taskRepositoryMock,
+            projectRepository = projectRepositoryMock,
         )
     }
 

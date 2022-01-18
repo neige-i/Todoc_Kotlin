@@ -49,17 +49,17 @@ class ListViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { deleteTaskUseCaseMock(any()) } returns Unit
+        coJustRun { deleteTaskUseCaseMock(any()) }
 
         listViewModel = ListViewModel(
-            getAllTasksWithProjectsUseCaseMock,
-            deleteTaskUseCaseMock,
-            testCoroutineRule.testCoroutineDispatcher
+            getAllTasksWithProjectsUseCase = getAllTasksWithProjectsUseCaseMock,
+            deleteTaskUseCase = deleteTaskUseCaseMock,
+            ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
     }
 
     @Test
-    fun `return list without being sorted`() {
+    fun `return non empty list`() {
         // GIVEN
         every { getAllTasksWithProjectsUseCaseMock(TaskSortingType.NONE) } returns flowOf(mapOf(
             task3_1 to project1,
@@ -74,20 +74,23 @@ class ListViewModelTest {
         // THEN
         assertEquals(
             ListViewState(
-                listOf(
+                taskViewStates = listOf(
                     TaskViewState(task3_1.id, task3_1.name, project1.name, project1.color),
                     TaskViewState(task4_3.id, task4_3.name, project3.name, project3.color),
                     TaskViewState(task1_2.id, task1_2.name, project2.name, project2.color),
                     TaskViewState(task2_2.id, task2_2.name, project2.name, project2.color),
                 ),
-                false
+                emptyTaskTextVisibility = false
             ),
             viewState
         )
+
+        verify(exactly = 1) { getAllTasksWithProjectsUseCaseMock.invoke(TaskSortingType.NONE) }
+        confirmVerified(getAllTasksWithProjectsUseCaseMock, deleteTaskUseCaseMock)
     }
 
     @Test
-    fun `return empty list without being sorted`() {
+    fun `return empty list`() {
         // GIVEN
         every { getAllTasksWithProjectsUseCaseMock(TaskSortingType.NONE) } returns flowOf(mapOf())
 
@@ -97,21 +100,24 @@ class ListViewModelTest {
         // THEN
         assertEquals(
             ListViewState(
-                listOf(),
-                true
+                taskViewStates = listOf(),
+                emptyTaskTextVisibility = true
             ),
             viewState
         )
+
+        verify(exactly = 1) { getAllTasksWithProjectsUseCaseMock.invoke(TaskSortingType.NONE) }
+        confirmVerified(getAllTasksWithProjectsUseCaseMock, deleteTaskUseCaseMock)
     }
 
     @Test
-    fun `verify the UseCase is called to remove the task`() {
+    fun `make the UseCase remove the task`() {
         // WHEN
         listViewModel.onTaskRemoved(42)
 
         // THEN
         coVerify(exactly = 1) { deleteTaskUseCaseMock(42) }
-        confirmVerified(deleteTaskUseCaseMock)
+        confirmVerified(getAllTasksWithProjectsUseCaseMock, deleteTaskUseCaseMock)
     }
 
     @Test
@@ -121,6 +127,8 @@ class ListViewModelTest {
 
         // THEN
         assertTrue(result)
+
+        confirmVerified(getAllTasksWithProjectsUseCaseMock, deleteTaskUseCaseMock)
     }
 
     @Test
@@ -130,5 +138,7 @@ class ListViewModelTest {
 
         // THEN
         assertFalse(result)
+
+        confirmVerified(getAllTasksWithProjectsUseCaseMock, deleteTaskUseCaseMock)
     }
 }

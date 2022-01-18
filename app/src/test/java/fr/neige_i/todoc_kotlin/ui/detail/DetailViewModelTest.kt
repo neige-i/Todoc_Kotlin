@@ -5,11 +5,13 @@ import fr.neige_i.todoc_kotlin.data.model.Project
 import fr.neige_i.todoc_kotlin.data.model.Task
 import fr.neige_i.todoc_kotlin.domain.GetSingleTaskWithProjectUseCase
 import fr.neige_i.todoc_kotlin.ui.util.NavArgsProducer
-import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.getValueForTesting
 import fr.neige_i.todoc_kotlin.util.TestCoroutineRule
+import fr.neige_i.todoc_kotlin.util.TestLifecycleRule.getValueForTesting
 import io.mockk.MockKAnnotations
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
@@ -52,9 +54,8 @@ class DetailViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every {
-            navArgsProducerMock.getNavArgs(DetailBottomSheetArgs::class)
-        } returns DetailBottomSheetArgs(TASK_ID_ARG)
+        every { navArgsProducerMock.getNavArgs(DetailBottomSheetArgs::class) } returns
+                DetailBottomSheetArgs(TASK_ID_ARG)
 
         every { getSingleTaskWithProjectUseCaseMock(TASK_ID_ARG) } returns flowOf(
             Pair(
@@ -64,15 +65,20 @@ class DetailViewModelTest {
         )
 
         detailViewModel = DetailViewModel(
-            navArgsProducerMock,
-            getSingleTaskWithProjectUseCaseMock,
-            franceZoneId
+            navArgsProducer = navArgsProducerMock,
+            getSingleTaskWithProjectUseCase = getSingleTaskWithProjectUseCaseMock,
+            defaultZoneId = franceZoneId
         )
+
+        verify(exactly = 1) { navArgsProducerMock.getNavArgs(DetailBottomSheetArgs::class) }
+        verify(exactly = 1) { getSingleTaskWithProjectUseCaseMock.invoke(TASK_ID_ARG) }
     }
 
     @Test
     fun `test the nominal case`() {
         // WHEN
+        // ViewModel is initialized
+
         val detailViewState = getValueForTesting(detailViewModel.viewState)
 
         // THEN
@@ -85,5 +91,7 @@ class DetailViewModelTest {
             ),
             detailViewState
         )
+
+        confirmVerified(navArgsProducerMock, getSingleTaskWithProjectUseCaseMock)
     }
 }

@@ -35,8 +35,8 @@ class TaskRepositoryImplTest {
         every { taskDaoMock.getTasksByProjectNameDesc() } returns flowOf()
         every { taskDaoMock.getTasksByDateAsc() } returns flowOf()
         every { taskDaoMock.getTasksByDateDesc() } returns flowOf()
-        coEvery { taskDaoMock.insert(any()) } returns Unit
-        coEvery { taskDaoMock.deleteWithId(any()) } returns Unit
+        coJustRun { taskDaoMock.insert(any()) }
+        coJustRun { taskDaoMock.deleteWithId(any()) }
 
         taskRepository = TaskRepositoryImpl(taskDaoMock)
     }

@@ -75,8 +75,8 @@ class GetAllTasksWithProjectsUseCaseImplTest {
         )
 
         getAllTasksWithProjectsUseCase = GetAllTasksWithProjectsUseCaseImpl(
-            taskRepositoryMock,
-            projectRepositoryMock,
+            taskRepository = taskRepositoryMock,
+            projectRepository = projectRepositoryMock,
         )
     }
 

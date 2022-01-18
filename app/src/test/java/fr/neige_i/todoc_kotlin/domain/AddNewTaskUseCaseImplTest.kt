@@ -53,9 +53,9 @@ class AddNewTaskUseCaseImplTest {
         coEvery { taskRepositoryMock.addTask(any()) } returns Unit
 
         addNewTaskUseCase = AddNewTaskUseCaseImpl(
-            taskRepositoryMock,
-            testCoroutineRule.testCoroutineDispatcher,
-            fixedClock
+            taskRepository = taskRepositoryMock,
+            ioDispatcher = testCoroutineRule.testCoroutineDispatcher,
+            defaultClock = fixedClock
         )
     }
 
